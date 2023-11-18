@@ -17,6 +17,11 @@ TextStyle buttonTextStyle = const TextStyle(
 );
 
 class _HomePageState extends State<HomePage> {
+
+  void myVoyagesPressed() {
+    Navigator.pushNamed(context, "/my_voyages");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,13 +116,12 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
             const Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () { myVoyagesPressed(); },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -129,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Text(
-                      "   My voyges   ",
+                      "   My voyages   ",
                       style: buttonTextStyle,
                     ),
                   ),
