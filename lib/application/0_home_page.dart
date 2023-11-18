@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 
 
 
-TextStyle buttonTextStyle = TextStyle(
+TextStyle buttonTextStyle = const TextStyle(
   fontSize: 25,
   fontFamily: "hand_mono",
   color: Colors.white,
@@ -51,18 +51,32 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.add_rounded,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      "   Quick random walk   ",
-                      style: buttonTextStyle,
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 13),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.add_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 10,),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            "Quick random walk",
+                            style: buttonTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -72,18 +86,32 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.nature_people,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      "   Nice places   ",
-                      style: buttonTextStyle,
+                  Container(
+                    padding: const EdgeInsets.only(left: 10, right: 13),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),),
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.add_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 10,),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            "Nice places",
+                            style: buttonTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -93,8 +121,8 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.save_rounded,
+                  const Icon(
+                    Icons.save_outlined,
                     color: Colors.white,
                     size: 30,
                   ),
