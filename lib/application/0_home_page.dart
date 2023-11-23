@@ -18,6 +18,14 @@ TextStyle buttonTextStyle = const TextStyle(
 
 class _HomePageState extends State<HomePage> {
 
+  void newRandomVoyagePressed() {
+    Navigator.pushNamed(context, "/quick_voyage");
+  }
+
+  void nicePlacesPressed() {
+    Navigator.pushNamed(context, "/nice_places");
+  }
+
   void myVoyagesPressed() {
     Navigator.pushNamed(context, "/my_voyages");
   }
@@ -52,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const Spacer(flex: 2,),
             TextButton(
-              onPressed: () {},
+              onPressed: () { newRandomVoyagePressed(); },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -81,13 +89,12 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
             const Spacer(),
             TextButton(
-              onPressed: () {},
+              onPressed: () { nicePlacesPressed(); },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
