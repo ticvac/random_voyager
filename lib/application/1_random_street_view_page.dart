@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
+import 'package:flutter_google_street_view/flutter_google_street_view.dart';
 
 class RandomStreetViewPage extends StatefulWidget {
   const RandomStreetViewPage({Key? key}) : super(key: key);
@@ -47,6 +48,23 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
                 margin: EdgeInsets.all(5),
                 color: Colors.green,
                 // streetView
+                child: FlutterGoogleStreetView(
+                  initPos: LatLng(25.0780892, 121.5753234),
+                  //initPanoId: SANTORINI,
+                  initSource: StreetViewSource.outdoor,
+
+                  initBearing: 30,
+
+                  zoomGesturesEnabled: false,
+
+
+                  onStreetViewCreated: (StreetViewController controller) async {
+                    /*controller.animateTo(
+                      duration: 750,
+                      camera: StreetViewPanoramaCamera(
+                          bearing: 90, tilt: 30, zoom: 3));*/
+                  },
+                ),
               ),
             ),
           ),
