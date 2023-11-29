@@ -56,8 +56,6 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
                   initBearing: 30,
 
                   zoomGesturesEnabled: false,
-
-
                   onStreetViewCreated: (StreetViewController controller) async {
                     /*controller.animateTo(
                       duration: 750,
