@@ -3,18 +3,26 @@ PODS:
   - flutter_google_street_view (1.0.0):
     - Flutter
     - GoogleMaps
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - GoogleMaps (5.2.0):
     - GoogleMaps/Maps (= 5.2.0)
   - GoogleMaps/Base (5.2.0)
   - GoogleMaps/Maps (5.2.0):
     - GoogleMaps/Base
+  - sqflite (0.0.3):
+    - Flutter
+    - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_google_street_view (from `.symlinks/plugins/flutter_google_street_view/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   trunk:
+    - FMDB
     - GoogleMaps
 
 EXTERNAL SOURCES:
@@ -22,12 +30,16 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_google_street_view:
     :path: ".symlinks/plugins/flutter_google_street_view/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_google_street_view: 40cf05d8d407185e922550f15ab8ad2218c174c6
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

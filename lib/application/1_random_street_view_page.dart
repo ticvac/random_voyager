@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
 import 'package:flutter_google_street_view/flutter_google_street_view.dart';
+import '../support/geolocator.dart';
 
 class RandomStreetViewPage extends StatefulWidget {
   const RandomStreetViewPage({Key? key}) : super(key: key);
@@ -10,6 +11,15 @@ class RandomStreetViewPage extends StatefulWidget {
 }
 
 class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
+
+  void newLocationPressed() {
+
+  }
+
+  void goFindPressed() {
+    Navigator.pushNamed(context, "/specific_voyage").then((value) => Navigator.pop(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +85,7 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
                   FloatingActionButton.extended(
                     heroTag: "1",
                     onPressed: () {
-                      //goFindPressed();
+                      goFindPressed();
                     },
                     backgroundColor: Colors.blueAccent,
                     icon: const Icon(
@@ -86,7 +96,7 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
                   FloatingActionButton.extended(
                     heroTag: "2",
                     onPressed: () {
-                      //newLocationPressed();
+                      newLocationPressed();
                     },
                     backgroundColor: Colors.pinkAccent,
                     icon: const Icon(
