@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../support/constants.dart';
 import 'package:flutter_google_street_view/flutter_google_street_view.dart';
 import '../support/geolocator.dart';
+import 'package:geolocator/geolocator.dart';
 
 class RandomStreetViewPage extends StatefulWidget {
   const RandomStreetViewPage({Key? key}) : super(key: key);
@@ -11,13 +12,28 @@ class RandomStreetViewPage extends StatefulWidget {
 }
 
 class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
+  String appBarTitle = "distance :  0 m";
+  double lat = 50.0875772;
+  double lon = 14.4211547;
+  double startLat = 50.0875772;
+  double startLon = 14.4211547;
+
+  void pointToMyPositionPressed() async {
+    Position position = await determinePosition();
+    lat = position.latitude;
+    lon = position.longitude;
+    startLat = position.latitude;
+    startLon = position.longitude;
+    appBarTitle = "distance :  0 m";
+    setState(() {});
+  }
 
   void newLocationPressed() {
 
   }
 
   void goFindPressed() {
-    Navigator.pushNamed(context, "/specific_voyage").then((value) => Navigator.pop(context));
+    Navigator.pushNamed(context, "/specific_voyage");//.then((value) => Navigator.pop(context));
   }
 
   @override
@@ -36,7 +52,7 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
         backgroundColor: darkerBlue,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () { pointToMyPositionPressed(); },
             child: const Icon(
               Icons.my_location,
               color: Colors.white,
@@ -59,13 +75,13 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
                 color: Colors.green,
                 // streetView
                 child: FlutterGoogleStreetView(
-                  initPos: LatLng(25.0780892, 121.5753234),
+                  initPos: LatLng(lat, lon),
                   //initPanoId: SANTORINI,
                   initSource: StreetViewSource.outdoor,
-
                   initBearing: 30,
 
-                  zoomGesturesEnabled: false,
+                  streetNamesEnabled: false,
+                  userNavigationEnabled: false,
                   onStreetViewCreated: (StreetViewController controller) async {
                     /*controller.animateTo(
                       duration: 750,
