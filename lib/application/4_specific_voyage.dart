@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
+import '../support/database.dart';
+import 'package:flutter/material.dart';
+
+class SpecificVoyageArguments {
+  Place place;
+
+  SpecificVoyageArguments({required this.place});
+}
 
 class SpecificVoyage extends StatefulWidget {
   const SpecificVoyage({Key? key}) : super(key: key);

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
 import 'package:flutter_google_street_view/flutter_google_street_view.dart';
+import '../support/database.dart';
 import '../support/geolocator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:math';
+import '4_specific_voyage.dart';
+
+// TODO seed
+var rng = Random();
 
 class RandomStreetViewPage extends StatefulWidget {
   const RandomStreetViewPage({Key? key}) : super(key: key);
@@ -29,11 +35,62 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
   }
 
   void newLocationPressed() {
-
+    calculateNewPosition();
   }
 
-  void goFindPressed() {
-    Navigator.pushNamed(context, "/specific_voyage");//.then((value) => Navigator.pop(context));
+  Future<void> goFindPressed() async {
+    int id = await addPlaceToDatabase(lat, lon, startLat, startLon);
+    List<Place> places = await getAllPlaces();
+    for (Place p in places) {
+      if (p.id == id) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(
+          context,
+          "/specific_voyage",
+          arguments: SpecificVoyageArguments(place: p),
+        ).then((value) {
+          Navigator.pop(context);
+        });
+      }
+    }
+  }
+
+  void calculateNewPosition() {
+    // generating new coordinates
+    // maybe between 0.3 and 1.3? whatever
+    // TODO add adjustable constants
+    int off1 = rng.nextInt(201);
+    off1 += -100;
+    int off2 = rng.nextInt(201);
+    off2 += -100;
+    double newLat = startLat + off1 * 0.00015;
+    double newLon = startLon + off2 * 0.00015;
+    // calculating distance
+    double latR = startLat * pi / 180;
+    double lonR = startLon * pi / 180;
+    double newLatR = newLat * pi / 180;
+    double newLonR =  newLon * pi / 180;
+    double dLatR = newLatR - latR;
+    double dLonR = newLonR - lonR;
+    num a = pow(sin(dLatR/2), 2)+cos(latR)*cos(newLatR)*pow(sin(dLonR/2), 2);
+    double d = 6373 * 2 * atan2(sqrt(a), sqrt(1 - a));
+    // check conditions
+    if (d > 1.0 || d < 0.1) {
+      calculateNewPosition();
+      print("-----------------");
+      return;
+    }
+    // updating to position
+    lat = newLat;
+    lon = newLon;
+    appBarTitle = "distance :  ${(d * 1000).toStringAsFixed(0)} m";
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pointToMyPositionPressed();
   }
 
   @override
@@ -41,9 +98,9 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
-          "distance : 0 m",
-          style: TextStyle(
+        title: Text(
+          appBarTitle,
+          style: const TextStyle(
               fontSize: 30,
               fontFamily: "hand_mono",
               color: Colors.white
@@ -98,17 +155,18 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  FloatingActionButton.extended(
-                    heroTag: "1",
-                    onPressed: () {
-                      goFindPressed();
-                    },
-                    backgroundColor: Colors.blueAccent,
-                    icon: const Icon(
-                      Icons.check_rounded,
+                  if (appBarTitle != "distance :  0 m")
+                    FloatingActionButton.extended(
+                      heroTag: "1",
+                      onPressed: () {
+                        goFindPressed();
+                      },
+                      backgroundColor: Colors.blueAccent,
+                      icon: const Icon(
+                        Icons.check_rounded,
+                      ),
+                      label: const Text("go find"),
                     ),
-                    label: const Text("go find"),
-                  ),
                   FloatingActionButton.extended(
                     heroTag: "2",
                     onPressed: () {

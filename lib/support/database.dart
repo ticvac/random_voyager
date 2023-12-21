@@ -76,7 +76,7 @@ Future<int> addPlaceToDatabase(
   String executableString = 'INSERT INTO PlacesV1(lat, lon, found, '
       'dateRegistered, dateFound, startingLat, startingLon) '
       'VALUES($lat, $lon, 0, "${DateTime.now().toString()}", '
-      '"${DateTime.now().toString()}", $startLat, $startLon)';
+      '"${DateTime.now().toString()}", $startLat, $startLon)'; // should be now?
   // Insert some records in a transaction
   int id = -1;
   Database db = await getDatabase();
