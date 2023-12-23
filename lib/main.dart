@@ -6,6 +6,7 @@ import 'application/2_nice_places.dart';
 import 'application/4_specific_voyage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
