@@ -4,9 +4,14 @@ import 'application/1_random_street_view_page.dart';
 import 'application/3_my_voyages.dart';
 import 'application/2_nice_places.dart';
 import 'application/4_specific_voyage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

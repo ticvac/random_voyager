@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NicePlaces extends StatefulWidget {
   const NicePlaces({Key? key}) : super(key: key);
@@ -13,6 +14,29 @@ class _NicePlacesState extends State<NicePlaces> {
   double w = 10;
   double h = 10;
 
+
+  Future<void> getData() async {
+    /*FirebaseFirestore.instance
+        .collection('guestbook')
+        .add(<String, dynamic>{
+      'text': message,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'name': FirebaseAuth.instance.currentUser!.displayName,
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+    }); */
+    var collection = FirebaseFirestore.instance.collection('test');
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      var name = data['name'];
+      var lat = data['lat'];
+      var lon = data['lon'];
+      print(name);
+    }
+    print("object");
+    setState(() {});
+  }
+
   bool init = true;
   @override
   Widget build(BuildContext context) {
@@ -20,12 +44,13 @@ class _NicePlacesState extends State<NicePlaces> {
       init = false;
       w = MediaQuery.of(context).size.width;
       h = MediaQuery.of(context).size.height;
+      getData();
     }
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text(
-          "Near nice places",
+          "Nice places nearby",
           style: TextStyle(
               fontSize: 30,
               fontFamily: "hand_mono",
@@ -56,7 +81,16 @@ class _NicePlacesState extends State<NicePlaces> {
                 ],
               )
             ],
-          )
+          ),
+          const Text(
+            "Loaded from firebase",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: "hand_mono",
+              fontSize: 30,
+            ),
+          ),
         ],
       ),
     );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "94060502223",
+    "project_id": "maturita-54231",
+    "storage_bucket": "maturita-54231.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94060502223:android:478672e764db026e872bba",
+        "android_client_info": {
+          "package_name": "com.example.maturita_tichy_repo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6__5fjuhGisgt-VpAfs27b9qFu2pq_rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
