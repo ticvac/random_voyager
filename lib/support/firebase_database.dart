@@ -73,3 +73,15 @@ Future<List<FirebaseDocument>> getAllFirebaseDocuments() async {
   }
   return toReturn;
 }
+
+Future<void> diffVotes(String id, int diff, String name) async {
+  final docRef = db.collection("public").doc(id);
+  int count = 0;
+  await docRef.get().then((DocumentSnapshot doc) {
+    var v = (doc.data() as Map<String, dynamic>);
+    count = v[name];
+  },
+      onError: (e) {}
+  );
+  await docRef.update({name : (count + diff)});
+}
