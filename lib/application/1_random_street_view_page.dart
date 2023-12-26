@@ -39,7 +39,7 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
   }
 
   Future<void> goFindPressed() async {
-    int id = await addPlaceToDatabase(lat, lon, startLat, startLon);
+    int id = await addPlaceToDatabase(lat, lon, startLat, startLon, "NaN");
     List<Place> places = await getAllPlaces();
     for (Place p in places) {
       if (p.id == id) {

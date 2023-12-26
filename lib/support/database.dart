@@ -11,6 +11,7 @@ class Place {
   DateTime dateFound; // string
   double startingLat;
   double startingLon;
+  String firebaseID;
 
   Place({
     required this.id,
@@ -21,6 +22,7 @@ class Place {
     required this.dateFound,
     required this.startingLat,
     required this.startingLon,
+    required this.firebaseID,
   });
 }
 
@@ -31,9 +33,9 @@ Future<Database> getDatabase() async {
   // open the database
   Database database = await openDatabase(path, version: 1,
     onCreate: (Database db, int version) async {
-      // version 1 - "PlacesV1"
+      // version 2 - "PlacesV2"
       await db.execute(
-        'CREATE TABLE PlacesV1 ('
+        'CREATE TABLE PlacesV2 ('
             'id INTEGER PRIMARY KEY, '
             'lat REAL, '
             'lon REAL, '
@@ -41,7 +43,8 @@ Future<Database> getDatabase() async {
             'dateRegistered TEXT, '
             'dateFound TEXT, '
             'startingLat REAL, '
-            'startingLon REAL)',
+            'startingLon REAL, '
+            'firebaseID TEXT)',
       );
     },
   );
@@ -50,7 +53,7 @@ Future<Database> getDatabase() async {
 
 Future<List<Place>> getAllPlaces() async {
   Database db = await getDatabase();
-  List<Map> placesRaw = await db.rawQuery('SELECT * FROM PlacesV1');
+  List<Map> placesRaw = await db.rawQuery('SELECT * FROM PlacesV2');
   await db.close();
   // mapping data
   List<Place> placesToReturn = [];
@@ -64,6 +67,7 @@ Future<List<Place>> getAllPlaces() async {
       dateFound: DateTime.parse(l["dateFound"]),
       startingLat: l["startingLat"],
       startingLon: l["startingLon"],
+      firebaseID: l["firebaseID"],
     );
     placesToReturn.add(place);
   }
@@ -71,12 +75,12 @@ Future<List<Place>> getAllPlaces() async {
 }
 
 Future<int> addPlaceToDatabase(
-    double lat, double lon, double startLat, double startLon) async {
+    double lat, double lon, double startLat, double startLon, String firebaseID) async {
   // create command
-  String executableString = 'INSERT INTO PlacesV1(lat, lon, found, '
-      'dateRegistered, dateFound, startingLat, startingLon) '
+  String executableString = 'INSERT INTO PlacesV2(lat, lon, found, '
+      'dateRegistered, dateFound, startingLat, startingLon, firebaseID) '
       'VALUES($lat, $lon, 0, "${DateTime.now().toString()}", '
-      '"${DateTime.now().toString()}", $startLat, $startLon)'; // should be now?
+      '"${DateTime.now().toString()}", $startLat, $startLon, "$firebaseID")'; // should be now?
   // Insert some records in a transaction
   int id = -1;
   Database db = await getDatabase();
@@ -90,13 +94,13 @@ Future<int> addPlaceToDatabase(
 Future<void> markAsFound(int id) async {
   Database db = await getDatabase();
   await db.rawUpdate(
-      'UPDATE PlacesV1 SET found = ? WHERE id = ?',
+      'UPDATE PlacesV2 SET found = ? WHERE id = ?',
       [1 , id]);
   await db.close();
 }
 
 Future<void> deletePlaceFromDatabase(int id) async {
   Database db = await getDatabase();
-  await db.rawDelete("DELETE FROM PlacesV1 WHERE id = ?", [id]);
+  await db.rawDelete("DELETE FROM PlacesV2 WHERE id = ?", [id]);
   await db.close();
 }
