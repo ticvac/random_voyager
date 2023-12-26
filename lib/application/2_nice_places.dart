@@ -1,6 +1,7 @@
+import 'package:Voyager/application/2_z0_specific_nice_place.dart';
 import 'package:flutter/material.dart';
 import '../support/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../support/firebase_database.dart';
 
 class NicePlaces extends StatefulWidget {
   const NicePlaces({Key? key}) : super(key: key);
@@ -10,30 +11,13 @@ class NicePlaces extends StatefulWidget {
 }
 
 class _NicePlacesState extends State<NicePlaces> {
-
   double w = 10;
   double h = 10;
 
+  List<FirebaseDocument> nicePlaces = [];
 
-  Future<void> getData() async {
-    /*FirebaseFirestore.instance
-        .collection('guestbook')
-        .add(<String, dynamic>{
-      'text': message,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'name': FirebaseAuth.instance.currentUser!.displayName,
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-    }); */
-    var collection = FirebaseFirestore.instance.collection('test');
-    var querySnapshot = await collection.get();
-    for (var queryDocumentSnapshot in querySnapshot.docs) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      var name = data['name'];
-      var lat = data['lat'];
-      var lon = data['lon'];
-      print(name);
-    }
-    print("object");
+  Future<void> loadData() async {
+    nicePlaces = await getAllFirebaseDocuments();
     setState(() {});
   }
 
@@ -44,7 +28,7 @@ class _NicePlacesState extends State<NicePlaces> {
       init = false;
       w = MediaQuery.of(context).size.width;
       h = MediaQuery.of(context).size.height;
-      getData();
+      loadData();
     }
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -61,63 +45,40 @@ class _NicePlacesState extends State<NicePlaces> {
       ),
       body: ListView(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Column(
             children: [
-              Column(
-                children: [
-                  SizedBox(height: 10,),
-                  getCell("Vyšehrad"),
-                  SizedBox(height: 10,),
-                  getCell("Katedrála sv. Víta"),
-                ],
-              ),
-              Column(
-                children: [
-                  SizedBox(height: 10,),
-                  getCell("Pražský hrad"),
-                  SizedBox(height: 10,),
-                  getCell("Tančící dům"),
-                ],
-              )
+              for (var i in nicePlaces) getCell(i)
             ],
-          ),
-          const Text(
-            "Loaded from firebase",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: "hand_mono",
-              fontSize: 30,
-            ),
           ),
         ],
       ),
     );
   }
 
-  Widget getCell(String name) {
-    return Container(
-      height: w / 2 - 20,
-      width: w / 2 - 20,
-      child: TextButton(
-        onPressed: () {},
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: coolYellow,
-          ),
+  Widget getCell(FirebaseDocument fb) {
+    return TextButton(
+      onPressed: () {
+        Navigator.pushNamed(
+          context,
+          "/specific_nice_place",
+          arguments: SpecificNicePlaceArguments(documentID: fb.id),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(bottom: 15, top: 10,),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: coolYellow,
+        ),
 
-          child: Center(
-            child: Text(
-              name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: "hand_mono",
-                fontSize: 30,
-              ),
+        child: Center(
+          child: Text(
+            fb.name,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: "hand_mono",
+              fontSize: 30,
             ),
           ),
         ),

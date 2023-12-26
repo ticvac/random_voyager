@@ -3,6 +3,7 @@ import 'application/0_home_page.dart';
 import 'application/1_random_street_view_page.dart';
 import 'application/3_my_voyages.dart';
 import 'application/2_nice_places.dart';
+import 'application/2_z0_specific_nice_place.dart';
 import 'application/4_specific_voyage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => const HomePage(),
         "/quick_voyage": (context) => const RandomStreetViewPage(),
         "/nice_places": (context) => const NicePlaces(),
+        "/specific_nice_place": (context) => const SpecificNicePlace(),
         "/my_voyages": (context) => const MyVoyages(),
         "/specific_voyage": (context) => const SpecificVoyage(),
 

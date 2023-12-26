@@ -62,32 +62,6 @@ class _SpecificVoyageState extends State<SpecificVoyage> {
       _shouldLoad = false;
       processArgs(args.place);
     }
-
-    /*return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        title: Text(
-          "distance : $distance m",
-          style: const TextStyle(
-              fontSize: 30,
-              fontFamily: "hand_mono",
-              color: Colors.white
-          ),
-        ),
-        backgroundColor: darkerBlue,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Icon(
-              Icons.my_location,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
-        ],
-      ),
-    ); */
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColor,
