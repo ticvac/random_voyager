@@ -91,9 +91,9 @@ Future<void> removeFromLookingForAndDone(String id) async {
   List<String> old = await getLookingForFirebase();
   old.removeWhere((element) => element == id);
   await setLookingForFirebase(old);
-  List<String> oldDone = await getLookingForFirebase();
+  List<String> oldDone = await getDoneFirebase();
   oldDone.removeWhere((element) => element == id);
-  await setLookingForFirebase(oldDone);
+  await setDoneFirebase(oldDone);
 }
 
 Future<void> addToLookingFor(String id) async {

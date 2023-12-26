@@ -104,3 +104,11 @@ Future<void> deletePlaceFromDatabase(int id) async {
   await db.rawDelete("DELETE FROM PlacesV2 WHERE id = ?", [id]);
   await db.close();
 }
+
+Future<void> changeFirebaseID(int id, String newFirebaseID) async {
+  Database db = await getDatabase();
+  await db.rawUpdate(
+      'UPDATE PlacesV2 SET firebaseID = ? WHERE id = ?',
+      [newFirebaseID , id]);
+  await db.close();
+}

@@ -72,7 +72,7 @@ class _SpecificVoyageState extends State<SpecificVoyage> {
   }
 
   Future<void> publishPressed(BuildContext context) async {
-    showDialogStreetViewPage(context);
+    showDialogStreetViewPage(context, lat, lon, place.id, processArgs);
   }
 
   bool _shouldLoad = true;

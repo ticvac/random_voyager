@@ -39,7 +39,7 @@ Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
         lon: v["lon"],
         name: v["name"],
         creatorID: v["creatorID"],
-        dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"]).seconds * 1000),
+        dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"])),
         upVotes: v["upVotes"],
         downVotes: v["downVotes"],
         isEnlisted: await isEnlisted(id),
@@ -72,7 +72,7 @@ Future<List<FirebaseDocument>> getAllFirebaseDocuments() async {
       lon: v["lon"],
       name: v["name"],
       creatorID: v["creatorID"],
-      dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"]).seconds * 1000),
+      dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"])),
       upVotes: v["upVotes"],
       downVotes: v["downVotes"],
       isEnlisted: await isEnlisted(queryDocumentSnapshot.id),
@@ -91,4 +91,30 @@ Future<void> diffVotes(String id, int diff, String name) async {
       onError: (e) {}
   );
   await docRef.update({name : (count + diff)});
+}
+
+Future<String> addDocToFirebase(name, lat, lon) async {
+  FirebaseDocument fb = FirebaseDocument(
+    id: "random",
+    lat: lat,
+    lon: lon,
+    name: name,
+    creatorID: "TODO",
+    dateCreated: DateTime.now(),
+    upVotes: 0,
+    downVotes: 0,
+    isEnlisted: true,
+  );
+  final data = <String, dynamic>{
+    "creatorID" : fb.creatorID,
+    "dateCreated" : fb.dateCreated.millisecondsSinceEpoch,
+    "downVotes" : fb.downVotes,
+    "upVotes" : fb.upVotes,
+    "name" : name,
+    "lat" : lat,
+    "lon" : lon,
+  };
+  return await db.collection("public").add(data).then((documentSnapshot) {
+    return documentSnapshot.id;
+  });
 }
