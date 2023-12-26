@@ -62,6 +62,12 @@ Future<void> setDownVotes(List<String> value) async {
 // downVote
 // get vote 1 for up -1 for down 0 for nothing
 
+Future<bool> isEnlisted(String id) async {
+  //await setLookingForFirebase([]);
+  //await setDoneFirebase([]);
+  return (await isInLookingFor(id)) || (await isInDone(id));
+}
+
 Future<bool> isInLookingFor(String id) async {
   return (await getLookingForFirebase()).contains(id);
 }
@@ -91,9 +97,11 @@ Future<void> removeFromLookingForAndDone(String id) async {
 }
 
 Future<void> addToLookingFor(String id) async {
-  List<String> old = await getLookingForFirebase();
-  old.add(id);
-  await setLookingForFirebase(old);
+  if (!(await getLookingForFirebase()).contains(id)) {
+    List<String> old = await getLookingForFirebase();
+    old.add(id);
+    await setLookingForFirebase(old);
+  }
 }
 
 // voting
@@ -104,7 +112,7 @@ Future<void> upVote(String id) async {
     old.add(id);
     await setUpVotes(old);
   }
-  if ((await getDoneFirebase()).contains(id)) {
+  if ((await getDownVotes()).contains(id)) {
     await diffVotes(id, -1, "downVotes");
     List<String> old = await getDownVotes();
     old.removeWhere((element) => element == id);
@@ -119,7 +127,7 @@ Future<void> downVote(String id) async {
     old.add(id);
     await setDownVotes(old);
   }
-  if ((await getDoneFirebase()).contains(id)) {
+  if ((await getUpVotes()).contains(id)) {
     await diffVotes(id, -1, "upVotes");
     List<String> old = await getUpVotes();
     old.removeWhere((element) => element == id);

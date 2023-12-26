@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import '../support/database.dart';
 import '../support/firebase_database.dart';
 import 'package:flutter_google_street_view/flutter_google_street_view.dart';
 import '../support/constants.dart';
 import '../support/geolocator.dart';
 import 'package:geolocator/geolocator.dart';
+import '../support/shared_prefs_database.dart';
+import '4_specific_voyage.dart';
 
 class SpecificNicePlaceArguments {
   String documentID;
@@ -29,6 +32,7 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
     dateCreated: DateTime.now(),
     upVotes: 0,
     downVotes: 0,
+    isEnlisted: false,
   );
   String appBarTitle = "distance :  ? m";
   double lat = 50.0875772;
@@ -42,6 +46,25 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
     double d = calculateDistance(lat, lon, p.latitude, p.longitude);
     appBarTitle = "distance :  ${(d * 1000).toStringAsFixed(0)} m";
     setState(() {});
+  }
+
+  Future<void> goFindPressed() async {
+    Position p = await determinePosition();
+    int id = await addPlaceToDatabase(lat, lon, p.latitude, p.longitude, documentID);
+    await addToLookingFor(documentID);
+    List<Place> places = await getAllPlaces();
+    for (Place p in places) {
+      if (p.id == id) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushNamed(
+          context,
+          "/specific_voyage",
+          arguments: SpecificVoyageArguments(place: p),
+        ).then((value) {
+          Navigator.pop(context);
+        });
+      }
+    }
   }
 
   bool _shouldLoad = true;
@@ -101,6 +124,43 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
           ),
           Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: FloatingActionButton.extended(
+                      backgroundColor: fb.upVotes >= fb.downVotes ? Colors.green : Colors.red,
+                      onPressed: null,
+                      label: Row(
+                        children: [
+                          Text(
+                            fb.upVotes.toString(),
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          SizedBox(width: 5,),
+                          const Icon(
+                            Icons.favorite,
+                          ),
+                          SizedBox(width: 40,),
+                          Text(
+                            fb.downVotes.toString(),
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          SizedBox(width: 5,),
+                          const Icon(
+                            Icons.dangerous,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -109,7 +169,7 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
                     FloatingActionButton.extended(
                       heroTag: "1",
                       onPressed: () {
-                        //goFindPressed();
+                        goFindPressed();
                       },
                       backgroundColor: Colors.blueAccent,
                       icon: const Icon(

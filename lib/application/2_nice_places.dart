@@ -57,7 +57,7 @@ class _NicePlacesState extends State<NicePlaces> {
 
   Widget getCell(FirebaseDocument fb) {
     return TextButton(
-      onPressed: () {
+      onPressed: fb.isEnlisted ? null : () {
         Navigator.pushNamed(
           context,
           "/specific_nice_place",
@@ -68,7 +68,7 @@ class _NicePlacesState extends State<NicePlaces> {
         padding: EdgeInsets.only(bottom: 15, top: 10,),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: coolYellow,
+          color: fb.isEnlisted ? Color(0xff3d4564) : coolYellow,
         ),
 
         child: Center(

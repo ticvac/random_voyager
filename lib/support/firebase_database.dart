@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'shared_prefs_database.dart';
 
 var db = FirebaseFirestore.instance;
 
@@ -12,6 +13,7 @@ class FirebaseDocument {
   // dateTime lastVisited ?
   int upVotes;
   int downVotes;
+  bool isEnlisted;
 
   FirebaseDocument({
     required this.id,
@@ -22,13 +24,15 @@ class FirebaseDocument {
     required this.dateCreated,
     required this.upVotes,
     required this.downVotes,
+    required this.isEnlisted,
   });
 }
 
 Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
   final docRef = db.collection("public").doc(id);
-  return await docRef.get().then((DocumentSnapshot doc) {
+  return await docRef.get().then((DocumentSnapshot doc) async {
       var v = (doc.data() as Map<String, dynamic>);
+
       return FirebaseDocument(
         id: id,
         lat: v["lat"],
@@ -38,6 +42,7 @@ Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
         dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"]).seconds * 1000),
         upVotes: v["upVotes"],
         downVotes: v["downVotes"],
+        isEnlisted: await isEnlisted(id),
       );
     },
     onError: (e) {
@@ -50,6 +55,7 @@ Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
         dateCreated: DateTime.now(),
         upVotes: 0,
         downVotes: 0,
+        isEnlisted: false,
       );
     }
   );
@@ -69,6 +75,7 @@ Future<List<FirebaseDocument>> getAllFirebaseDocuments() async {
       dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"]).seconds * 1000),
       upVotes: v["upVotes"],
       downVotes: v["downVotes"],
+      isEnlisted: await isEnlisted(queryDocumentSnapshot.id),
     ));
   }
   return toReturn;
