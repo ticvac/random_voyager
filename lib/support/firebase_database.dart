@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'shared_prefs_database.dart';
+import 'package:geolocator/geolocator.dart';
+import 'geolocator.dart';
 
 var db = FirebaseFirestore.instance;
 
@@ -78,6 +80,8 @@ Future<List<FirebaseDocument>> getAllFirebaseDocuments() async {
       isEnlisted: await isEnlisted(queryDocumentSnapshot.id),
     ));
   }
+  Position p = await determinePosition();
+  toReturn.sort((a, b) =>calculateDistance(p.latitude, p.longitude, a.lat, a.lon).compareTo(calculateDistance(p.latitude, p.longitude, b.lat, b.lon)));
   return toReturn;
 }
 
