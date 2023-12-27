@@ -1,23 +1,23 @@
-import 'package:Voyager/application/2_z0_specific_nice_place.dart';
 import 'package:flutter/material.dart';
+import '../application/2_z0_specific_nice_place.dart';
 import '../support/constants.dart';
 import '../support/firebase_database.dart';
 
-class NicePlaces extends StatefulWidget {
-  const NicePlaces({Key? key}) : super(key: key);
+class Admin extends StatefulWidget {
+  const Admin({Key? key}) : super(key: key);
 
   @override
-  State<NicePlaces> createState() => _NicePlacesState();
+  State<Admin> createState() => _AdminState();
 }
 
-class _NicePlacesState extends State<NicePlaces> {
+class _AdminState extends State<Admin> {
   double w = 10;
   double h = 10;
 
   List<FirebaseDocument> nicePlaces = [];
 
   Future<void> loadData() async {
-    nicePlaces = await getAllFirebaseDocuments(false);
+    nicePlaces = await getAllFirebaseDocuments(true);
     setState(() {});
   }
 
@@ -31,18 +31,7 @@ class _NicePlacesState extends State<NicePlaces> {
       loadData();
     }
     return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          "Nice places nearby",
-          style: TextStyle(
-              fontSize: 30,
-              fontFamily: "hand_mono",
-              color: Colors.white
-          ),
-        ),
-        backgroundColor: darkerBlue,
-      ),
+      appBar: AppBar(),
       body: ListView(
         children: [
           Column(
@@ -57,18 +46,18 @@ class _NicePlacesState extends State<NicePlaces> {
 
   Widget getCell(FirebaseDocument fb) {
     return TextButton(
-      onPressed: fb.isEnlisted ? null : () {
+      onPressed: () {
         Navigator.pushNamed(
           context,
           "/specific_nice_place",
-          arguments: SpecificNicePlaceArguments(documentID: fb.id, adminDecision: false),
+          arguments: SpecificNicePlaceArguments(documentID: fb.id, adminDecision: true),
         );
       },
       child: Container(
         padding: EdgeInsets.only(bottom: 15, top: 10,),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: fb.isEnlisted ? Color(0xff3d4564) : coolYellow,
+          color: coolYellow,
         ),
 
         child: Center(

@@ -10,8 +10,9 @@ import '4_specific_voyage.dart';
 
 class SpecificNicePlaceArguments {
   String documentID;
+  bool adminDecision;
 
-  SpecificNicePlaceArguments({required this.documentID});
+  SpecificNicePlaceArguments({required this.documentID, required this.adminDecision});
 }
 
 class SpecificNicePlace extends StatefulWidget {
@@ -32,6 +33,7 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
     dateCreated: DateTime.now(),
     upVotes: 0,
     downVotes: 0,
+    isPublic: false,
     isEnlisted: false,
   );
   String appBarTitle = "distance :  ? m";
@@ -162,24 +164,52 @@ class _SpecificNicePlaceState extends State<SpecificNicePlace> {
                 ],
               ),
               Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (appBarTitle != "distance :  0 m")
-                    FloatingActionButton.extended(
-                      heroTag: "1",
-                      onPressed: () {
-                        goFindPressed();
+              if(args.adminDecision)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "21",
+                      onPressed: () async {
+                        await setIsPublic(fb.id, 1);
+                        Navigator.pop(context);
                       },
-                      backgroundColor: Colors.blueAccent,
-                      icon: const Icon(
-                        Icons.check_rounded,
+                      child: Icon(
+                        Icons.send,
                       ),
-                      label: const Text("go find"),
                     ),
-
-                ],
-              ),
+                    SizedBox(width: 20,),
+                    FloatingActionButton(
+                      heroTag: "22",
+                      backgroundColor: Colors.red,
+                      onPressed: () async {
+                        await setIsPublic(fb.id, -1);
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.delete,
+                      ),
+                    ),
+                  ],
+                ),
+              if(!args.adminDecision)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (appBarTitle != "distance :  0 m")
+                      FloatingActionButton.extended(
+                        heroTag: "1",
+                        onPressed: () {
+                          goFindPressed();
+                        },
+                        backgroundColor: Colors.blueAccent,
+                        icon: const Icon(
+                          Icons.check_rounded,
+                        ),
+                        label: const Text("go find"),
+                      ),
+                  ],
+                ),
               SizedBox(height: 40,)
             ],
           ),

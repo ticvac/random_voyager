@@ -36,6 +36,7 @@ class _SpecificVoyageState extends State<SpecificVoyage> {
     dateCreated: DateTime.now(),
     upVotes: 0,
     downVotes: 0,
+    isPublic: false,
     isEnlisted: false,
   );
 
@@ -48,11 +49,17 @@ class _SpecificVoyageState extends State<SpecificVoyage> {
 
   void iAmHerePressed() async {
     Position p = await determinePosition();
-    //if (calculateDistance(lat, lon, p.latitude, p.longitude) * 1000 < 50) {
+    if (adminState) {
       await moveFromLookingForToDone(place.firebaseID);
       await markAsFound(place.id);
       Navigator.pop(context);
-    //}
+    } else {
+      if (calculateDistance(lat, lon, p.latitude, p.longitude) * 1000 < 50) {
+        await moveFromLookingForToDone(place.firebaseID);
+        await markAsFound(place.id);
+        Navigator.pop(context);
+      }
+    }
   }
 
   void deletePlacePressed() {

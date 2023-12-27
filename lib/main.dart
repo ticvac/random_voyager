@@ -7,6 +7,7 @@ import 'application/2_z0_specific_nice_place.dart';
 import 'application/4_specific_voyage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'tests/admin.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         "/specific_voyage": (context) => const SpecificVoyage(),
 
         // testing routes
+        "/admin": (context) => const Admin(),
 
         //"/geolocator_test": (context) => ,
         //"/map_test": (context) => ,

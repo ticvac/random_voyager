@@ -15,6 +15,7 @@ class FirebaseDocument {
   // dateTime lastVisited ?
   int upVotes;
   int downVotes;
+  bool isPublic;
   bool isEnlisted;
 
   FirebaseDocument({
@@ -26,6 +27,7 @@ class FirebaseDocument {
     required this.dateCreated,
     required this.upVotes,
     required this.downVotes,
+    required this.isPublic,
     required this.isEnlisted,
   });
 }
@@ -44,6 +46,7 @@ Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
         dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"])),
         upVotes: v["upVotes"],
         downVotes: v["downVotes"],
+        isPublic: v["isPublic"] == 1,
         isEnlisted: await isEnlisted(id),
       );
     },
@@ -57,28 +60,32 @@ Future<FirebaseDocument> getOneFirebaseDocumentById(String id) async {
         dateCreated: DateTime.now(),
         upVotes: 0,
         downVotes: 0,
+        isPublic: false,
         isEnlisted: false,
       );
     }
   );
 }
 
-Future<List<FirebaseDocument>> getAllFirebaseDocuments() async {
+Future<List<FirebaseDocument>> getAllFirebaseDocuments(bool admin) async {
   List<FirebaseDocument> toReturn = [];
   var querySnapshot = await db.collection("public").get();
   for (var queryDocumentSnapshot in querySnapshot.docs) {
     Map<String, dynamic> v = queryDocumentSnapshot.data();
-    toReturn.add(FirebaseDocument(
-      id: queryDocumentSnapshot.id,
-      lat: v["lat"],
-      lon: v["lon"],
-      name: v["name"],
-      creatorID: v["creatorID"],
-      dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"])),
-      upVotes: v["upVotes"],
-      downVotes: v["downVotes"],
-      isEnlisted: await isEnlisted(queryDocumentSnapshot.id),
-    ));
+    if ((v["isPublic"] == 1 && !admin) || (v["isPublic"] == 0 && admin)) {
+      toReturn.add(FirebaseDocument(
+        id: queryDocumentSnapshot.id,
+        lat: v["lat"],
+        lon: v["lon"],
+        name: v["name"],
+        creatorID: v["creatorID"],
+        dateCreated: DateTime.fromMillisecondsSinceEpoch((v["dateCreated"])),
+        upVotes: v["upVotes"],
+        downVotes: v["downVotes"],
+        isPublic: v["isPublic"] == 1,
+        isEnlisted: await isEnlisted(queryDocumentSnapshot.id),
+      ));
+    }
   }
   Position p = await determinePosition();
   toReturn.sort((a, b) =>calculateDistance(p.latitude, p.longitude, a.lat, a.lon).compareTo(calculateDistance(p.latitude, p.longitude, b.lat, b.lon)));
@@ -107,6 +114,7 @@ Future<String> addDocToFirebase(name, lat, lon) async {
     dateCreated: DateTime.now(),
     upVotes: 0,
     downVotes: 0,
+    isPublic: false,
     isEnlisted: true,
   );
   final data = <String, dynamic>{
@@ -117,8 +125,14 @@ Future<String> addDocToFirebase(name, lat, lon) async {
     "name" : name,
     "lat" : lat,
     "lon" : lon,
+    "isPublic" : 0,
   };
   return await db.collection("public").add(data).then((documentSnapshot) {
     return documentSnapshot.id;
   });
+}
+
+Future<void> setIsPublic(String id, int newValue) async {
+  final docRef = db.collection("public").doc(id);
+  await docRef.update({"isPublic" : newValue});
 }

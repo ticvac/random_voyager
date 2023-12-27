@@ -8,8 +8,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
-
 TextStyle buttonTextStyle = const TextStyle(
   fontSize: 25,
   fontFamily: "hand_mono",
@@ -44,6 +42,16 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         backgroundColor: darkerBlue,
+        actions: [
+          if(adminState)
+          TextButton(
+            onPressed: () { Navigator.pushNamed(context, "/admin"); },
+            child: Icon(
+              Icons.publish,
+              color: Colors.red,
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
