@@ -52,14 +52,12 @@ class _SpecificVoyageState extends State<SpecificVoyage> {
     if (adminState) {
       await moveFromLookingForToDone(place.firebaseID);
       await markAsFound(place.id);
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.pushReplacementNamed(context, "/");
+      Navigator.pop(context);
     } else {
       if (calculateDistance(lat, lon, p.latitude, p.longitude) * 1000 < 50) {
         await moveFromLookingForToDone(place.firebaseID);
         await markAsFound(place.id);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, "/");
+        Navigator.pop(context);
       }
     }
   }

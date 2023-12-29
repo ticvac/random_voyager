@@ -24,7 +24,7 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
   double startLat = 50.0875772;
   double startLon = 14.4211547;
 
-  void pointToMyPositionPressed() async {
+  Future<void> pointToMyPositionPressed() async {
     Position position = await determinePosition();
     lat = position.latitude;
     lon = position.longitude;
@@ -90,7 +90,13 @@ class _RandomStreetViewPageState extends State<RandomStreetViewPage> {
   @override
   void initState() {
     super.initState();
-    pointToMyPositionPressed();
+    loadAsync();
+  }
+
+  Future<void> loadAsync() async {
+    await pointToMyPositionPressed();
+    calculateNewPosition();
+
   }
 
   @override

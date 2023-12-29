@@ -66,6 +66,23 @@ void showDialogStreetViewPage(BuildContext context, double lat, double lon, loca
                 ),
               ),
             ),
+            SizedBox(height: 10,),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(bottom: 8, left: 15, right: 15),
+                child: const Text(
+                  "Close",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "hand_mono",
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

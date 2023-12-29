@@ -62,7 +62,9 @@ class _NicePlacesState extends State<NicePlaces> {
           context,
           "/specific_nice_place",
           arguments: SpecificNicePlaceArguments(documentID: fb.id, adminDecision: false),
-        );
+        ).then((value) {
+          Navigator.pop(context);
+        });
       },
       child: Container(
         padding: EdgeInsets.only(bottom: 15, top: 10,),
