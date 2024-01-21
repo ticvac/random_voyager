@@ -6,4 +6,4 @@ Color darkerBlue = const Color(0xff091521);
 Color coolPurple = const Color(0xffa7aceb);
 Color blue = const Color(0xff1c7aff);
 
-const bool adminState = false;
+const bool adminState = true;
